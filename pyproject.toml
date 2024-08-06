@@ -15,7 +15,6 @@ requests = "^2.31.0"
 anthropic = "^0.32.0"
 pydantic-settings = "^2.4.0"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
@@ -27,3 +26,19 @@ run-alerts = "scripts.run_alerts:main"
 pythonpath = [
   "."
 ]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+strict = true
+
+[tool.ruff]
+select = ["E", "F", "I"]
+ignore = []
+line-length = 120
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.isort]
+known-first-party = ["reddit_llm_alerts"]
