@@ -1,7 +1,9 @@
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from reddit_llm_alerts.reddit_client import RedditClient
+
 from reddit_llm_alerts.models import RedditPost
+from reddit_llm_alerts.reddit_client import RedditClient
 
 
 @pytest.fixture
@@ -10,14 +12,14 @@ def reddit_client():
 
 
 def test_get_token(reddit_client):
-    with patch('requests.post') as mock_post:
+    with patch("requests.post") as mock_post:
         mock_post.return_value.json.return_value = {"access_token": "test_token"}
         reddit_client._get_token()
         assert reddit_client.token == "test_token"
 
 
 def test_search_subreddit(reddit_client):
-    with patch.object(reddit_client, '_make_request') as mock_request:
+    with patch.object(reddit_client, "_make_request") as mock_request:
         mock_request.return_value = {
             "data": {
                 "children": [
@@ -30,7 +32,7 @@ def test_search_subreddit(reddit_client):
                             "author": "test_author",
                             "score": 100,
                             "created_utc": 1620000000,
-                            "subreddit": "test_subreddit"
+                            "subreddit": "test_subreddit",
                         }
                     }
                 ]
@@ -52,7 +54,7 @@ def test_search_subreddit(reddit_client):
 
 
 def test_make_request(reddit_client):
-    with patch.object(reddit_client, '_get_token'), patch('requests.get') as mock_get:
+    with patch.object(reddit_client, "_get_token"), patch("requests.get") as mock_get:
         mock_get.return_value.json.return_value = {"test": "data"}
         result = reddit_client._make_request("/test_endpoint")
         assert result == {"test": "data"}

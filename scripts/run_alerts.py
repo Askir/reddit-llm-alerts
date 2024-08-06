@@ -2,10 +2,10 @@ import argparse
 import logging
 from typing import List
 
-from reddit_llm_alerts.config import config
-from reddit_llm_alerts.reddit_client import RedditClient
 from reddit_llm_alerts.anthropic_client import AnthropicClient
+from reddit_llm_alerts.config import config
 from reddit_llm_alerts.models import RedditPost, RelevanceResult
+from reddit_llm_alerts.reddit_client import RedditClient
 
 
 def setup_logging():
@@ -15,9 +15,7 @@ def setup_logging():
     )
 
 
-def fetch_posts(
-    reddit_client: RedditClient, subreddits: List[str], keywords: List[str]
-) -> List[RedditPost]:
+def fetch_posts(reddit_client: RedditClient, subreddits: List[str], keywords: List[str]) -> List[RedditPost]:
     all_posts = []
     for subreddit in subreddits:
         posts = reddit_client.search_subreddit(subreddit, keywords)
@@ -25,23 +23,17 @@ def fetch_posts(
     return all_posts
 
 
-def analyze_posts(
-    anthropic_client: AnthropicClient, posts: List[RedditPost]
-) -> List[RelevanceResult]:
+def analyze_posts(anthropic_client: AnthropicClient, posts: List[RedditPost]) -> List[RelevanceResult]:
     results = []
     for post in posts:
-        is_relevant = anthropic_client.analyze_relevance(
-            post.content, config.project_description
-        )
+        is_relevant = anthropic_client.analyze_relevance(post.content, config.project_description)
         results.append(RelevanceResult(post=post, is_relevant=is_relevant))
     return results
 
 
 def display_results(results: List[RelevanceResult]):
     relevant_posts = [result for result in results if result.is_relevant]
-    print(
-        f"Found {len(relevant_posts)} relevant posts out of {len(results)} total posts:"
-    )
+    print(f"Found {len(relevant_posts)} relevant posts out of {len(results)} total posts:")
     for result in relevant_posts:
         post = result.post
         print(f"\nTitle: {post.title}")

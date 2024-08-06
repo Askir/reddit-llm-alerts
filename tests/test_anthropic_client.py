@@ -1,9 +1,10 @@
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 from reddit_llm_alerts.anthropic_client import AnthropicClient
 
 
 def test_analyze_relevance():
-    with patch('anthropic.Client') as MockClient:
+    with patch("anthropic.Client") as MockClient:
         mock_client = MockClient.return_value
         mock_response = MagicMock()
         mock_response.content = [MagicMock(text="true")]
@@ -19,7 +20,7 @@ def test_analyze_relevance():
 
 
 def test_analyze_relevance_false():
-    with patch('anthropic.Client') as MockClient:
+    with patch("anthropic.Client") as MockClient:
         mock_client = MockClient.return_value
         mock_response = MagicMock()
         mock_response.content = [MagicMock(text="false")]
@@ -34,17 +35,13 @@ def test_analyze_relevance_false():
 
 
 def test_batch_analyze_relevance():
-    with patch('anthropic.Client'):
+    with patch("anthropic.Client"):
         anthropic_client = AnthropicClient("test_api_key")
 
-        with patch.object(anthropic_client, 'analyze_relevance') as mock_analyze:
+        with patch.object(anthropic_client, "analyze_relevance") as mock_analyze:
             mock_analyze.side_effect = [True, False, True]
 
-            posts = [
-                {"content": "Test 1"},
-                {"content": "Test 2"},
-                {"content": "Test 3"}
-            ]
+            posts = [{"content": "Test 1"}, {"content": "Test 2"}, {"content": "Test 3"}]
 
             results = anthropic_client.batch_analyze_relevance(posts, "Test project")
 

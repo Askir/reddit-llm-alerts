@@ -1,5 +1,7 @@
+from typing import Dict, List
+
 import requests
-from typing import List, Dict
+
 from .models import RedditPost
 
 
@@ -34,15 +36,11 @@ class RedditClient:
             "Authorization": f"bearer {self.token}",
             "User-Agent": self.user_agent,
         }
-        response = requests.get(
-            f"{self.base_url}{endpoint}", headers=headers, params=params
-        )
+        response = requests.get(f"{self.base_url}{endpoint}", headers=headers, params=params)
         response.raise_for_status()
         return response.json()
 
-    def search_subreddit(
-        self, subreddit: str, keywords: List[str], limit: int = 10
-    ) -> List[RedditPost]:
+    def search_subreddit(self, subreddit: str, keywords: List[str], limit: int = 10) -> List[RedditPost]:
         query = " OR ".join(keywords)
         params = {
             "q": query,

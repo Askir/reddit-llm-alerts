@@ -1,6 +1,7 @@
-import anthropic
-from typing import List
 import logging
+from typing import List
+
+import anthropic
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,8 @@ class AnthropicClient:
 
         Reddit Post Content: {post_content}
 
-        Based on the project description and the content of the Reddit post, determine if this post is relevant to the project. 
+        Based on the project description and the content of the Reddit post,
+        determine if this post is relevant to the project. 
         Be very strict and take the project description at face value.
         Respond with only 'true' if the post is relevant, or 'false' if it is not relevant.
         """
@@ -42,10 +44,5 @@ class AnthropicClient:
             logger.error(f"Unexpected error when analyzing post relevance: {str(e)}")
             return False
 
-    def batch_analyze_relevance(
-        self, posts: List[dict], project_description: str
-    ) -> List[bool]:
-        return [
-            self.analyze_relevance(post["content"], project_description)
-            for post in posts
-        ]
+    def batch_analyze_relevance(self, posts: List[dict], project_description: str) -> List[bool]:
+        return [self.analyze_relevance(post["content"], project_description) for post in posts]
