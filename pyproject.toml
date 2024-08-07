@@ -2,7 +2,7 @@
 name = "reddit-llm-alerts"
 version = "0.1.0"
 description = "LLM powered alerts for reddit threads"
-authors = ["Jascha <bestejascha@gmail.com>"]
+authors = ["Jascha <jascha@kviklet.dev>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
