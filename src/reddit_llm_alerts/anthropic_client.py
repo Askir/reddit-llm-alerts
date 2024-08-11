@@ -7,9 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 class AnthropicClient:
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20240620"):
         self.client = anthropic.Client(api_key=api_key)
-        self.model = "claude-3-5-sonnet-20240620"  # You can change this to the specific model you want to use
+        self.model = model
 
     def analyze_relevance(self, post_content: str, project_description: str) -> bool:
         prompt = f"""

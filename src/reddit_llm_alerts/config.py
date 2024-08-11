@@ -13,6 +13,7 @@ class Config(BaseSettings):
     keywords: List[str] = ["AI", "machine learning"]
     project_description: str = "A project to monitor Reddit for AI-related discussions"
     hours: int = 24
+    model: str = "claude-3-5-sonnet-20240620"
     log_level: str = "INFO"
 
     model_config = SettingsConfigDict(

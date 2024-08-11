@@ -92,7 +92,7 @@ def main():
         client_secret=config.reddit_client_secret,
         user_agent=config.reddit_user_agent,
     )
-    anthropic_client = AnthropicClient(api_key=config.anthropic_api_key)
+    anthropic_client = AnthropicClient(api_key=config.anthropic_api_key, model=config.model)
 
     logger.info("Fetching posts from Reddit...")
     posts = fetch_posts(reddit_client, args.subreddits, args.keywords)
