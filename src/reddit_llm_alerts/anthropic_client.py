@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class AnthropicClient:
     def __init__(self, api_key: str):
         self.client = anthropic.Client(api_key=api_key)
-        self.model = "claude-3-haiku-20240307"  # You can change this to the specific model you want to use
+        self.model = "claude-3-5-sonnet-20240620"  # You can change this to the specific model you want to use
 
     def analyze_relevance(self, post_content: str, project_description: str) -> bool:
         prompt = f"""
@@ -19,7 +19,9 @@ class AnthropicClient:
 
         Based on the project description and the content of the Reddit post,
         determine if this post is relevant to the project. 
-        Be very strict and take the project description at face value.
+        Be somewhat strict and take the project description at face value.
+        Relevant is only a post that describes a problem that can be solved with the project.
+        Or it discusses a solution that is similar to the project.
         Respond with only 'true' if the post is relevant, or 'false' if it is not relevant.
         """
 

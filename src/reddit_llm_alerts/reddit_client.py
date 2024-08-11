@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, UTC
 from typing import Dict, List
 
 import requests
@@ -40,7 +41,7 @@ class RedditClient:
         response.raise_for_status()
         return response.json()
 
-    def search_subreddit(self, subreddit: str, keywords: List[str], limit: int = 10) -> List[RedditPost]:
+    def search_subreddit(self, subreddit: str, keywords: List[str], limit: int = 10, max_time_back_in_hours: int = 24) -> List[RedditPost]:
         query = " OR ".join(keywords)
         params = {
             "q": query,
@@ -50,20 +51,22 @@ class RedditClient:
         }
         data = self._make_request(f"/r/{subreddit}/search.json", params)
 
+        two_days_ago = datetime.utcnow() - timedelta(hours=max_time_back_in_hours)
+
         posts = []
-        for post in data["data"]["children"]:
-            post_data = post["data"]
-            posts.append(
-                RedditPost(
-                    id=post_data["id"],
-                    title=post_data["title"],
-                    content=post_data["selftext"],
-                    url=post_data["url"],
-                    author=post_data["author"],
-                    score=post_data["score"],
-                    created_utc=post_data["created_utc"],
-                    subreddit=post_data["subreddit"],
-                )
-            )
+        for post in data['data']['children']:
+            post_data = post['data']
+            created_utc = post_data['created_utc']
+            if datetime.fromtimestamp(created_utc) >= two_days_ago:
+                posts.append(RedditPost(
+                    id=post_data['id'],
+                    title=post_data['title'],
+                    content=post_data['selftext'],
+                    url=post_data['url'],
+                    author=post_data['author'],
+                    score=post_data['score'],
+                    created_utc=created_utc,
+                    subreddit=post_data['subreddit']
+                ))
 
         return posts

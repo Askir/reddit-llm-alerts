@@ -12,6 +12,7 @@ class Config(BaseSettings):
     subreddits: List[str] = ["AskReddit", "news"]
     keywords: List[str] = ["AI", "machine learning"]
     project_description: str = "A project to monitor Reddit for AI-related discussions"
+    hours: int = 24
     log_level: str = "INFO"
 
     model_config = SettingsConfigDict(
